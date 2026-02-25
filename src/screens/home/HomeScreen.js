@@ -1,7 +1,8 @@
 import React, {useMemo} from 'react';
 import {View, Text, FlatList, StyleSheet} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
+import {logout} from '../../redux/slices/authSlice';
 import {getTheme} from '../../constants/theme';
 import Header from '../../components/Header';
 import HabitCard from '../../components/HabitCard';
@@ -11,10 +12,15 @@ import EmptyState from '../../components/EmptyState';
 import {getTodayString} from '../../utils/dateUtils';
 
 const HomeScreen = ({navigation}) => {
+  const dispatch = useDispatch();
   const {isDark} = useSelector(state => state.theme);
   const {habits} = useSelector(state => state.habits);
   const {user} = useSelector(state => state.auth);
   const theme = getTheme(isDark);
+
+  const handleLogout = () => {
+    dispatch(logout());
+  };
 
   const today = getTodayString();
 
@@ -70,7 +76,7 @@ const HomeScreen = ({navigation}) => {
     <SafeAreaView
       style={[styles.container, {backgroundColor: theme.colors.background}]}
       edges={['top']}>
-      <Header title="HabitFlow" />
+      <Header title="HabitFlow" onLogout={handleLogout} />
 
       <FlatList
         data={habits}

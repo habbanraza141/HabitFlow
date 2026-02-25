@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {toggleTheme} from '../redux/slices/themeSlice';
 import {getTheme} from '../constants/theme';
 
-const Header = ({title, showBack, onBack, rightComponent}) => {
+const Header = ({title, showBack, onBack, onLogout, rightComponent}) => {
   const dispatch = useDispatch();
   const {isDark} = useSelector(state => state.theme);
   const theme = getTheme(isDark);
@@ -35,18 +35,30 @@ const Header = ({title, showBack, onBack, rightComponent}) => {
       </View>
       <View style={styles.right}>
         {rightComponent || (
-          <TouchableOpacity
-            onPress={() => dispatch(toggleTheme())}
-            style={[
-              styles.themeButton,
-              {backgroundColor: theme.colors.surface},
-            ]}>
-            <Icon
-              name={isDark ? 'white-balance-sunny' : 'moon-waning-crescent'}
-              size={20}
-              color={isDark ? '#FFB020' : '#6C63FF'}
-            />
-          </TouchableOpacity>
+          <>
+            <TouchableOpacity
+              onPress={() => dispatch(toggleTheme())}
+              style={[
+                styles.themeButton,
+                {backgroundColor: theme.colors.surface},
+              ]}>
+              <Icon
+                name={isDark ? 'white-balance-sunny' : 'moon-waning-crescent'}
+                size={20}
+                color={isDark ? '#FFB020' : '#6C63FF'}
+              />
+            </TouchableOpacity>
+            {onLogout && (
+              <TouchableOpacity
+                onPress={onLogout}
+                style={[
+                  styles.themeButton,
+                  {backgroundColor: theme.colors.surface, marginLeft: 10},
+                ]}>
+                <Icon name="logout" size={20} color={theme.colors.danger} />
+              </TouchableOpacity>
+            )}
+          </>
         )}
       </View>
     </View>
